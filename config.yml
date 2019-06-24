@@ -1,0 +1,6 @@
+driver: postgres
+protocol: postgres
+username: postgres
+password: 322453az
+host: 192.168.0.104
+dbname: accounting
