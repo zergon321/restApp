@@ -9,7 +9,6 @@ RUN go install restApp
 
 COPY sql/ /go/bin/sql/
 COPY config.yml /go/bin/
-RUN find
 
 ENTRYPOINT [ "/go/bin/restApp" ]
 
