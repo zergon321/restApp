@@ -24,12 +24,6 @@ const (
 )
 
 func main() {
-	err := os.Chdir("bin")
-
-	if err != nil {
-		log.Fatalln("Couldn't change working directory:", err)
-	}
-
 	// Create log file and logger.
 	file, err := os.OpenFile(LOG, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 
