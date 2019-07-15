@@ -27,7 +27,7 @@ func main() {
 	err := os.Chdir("bin")
 
 	if err != nil {
-		log.Fatalln("Couldn't change directory to bin")
+		log.Fatalln("Couldn't change directory to bin:", err)
 	}
 
 	// Create log file and logger.
