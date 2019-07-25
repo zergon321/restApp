@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"restApp/conf"
 	"restApp/repo"
 	"restApp/rest"
@@ -24,7 +25,14 @@ const (
 )
 
 func main() {
-	err := os.Chdir("bin")
+	// Change working directory to the application directory.
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	if err != nil {
+		log.Fatalln("Couldn't get current application folder path:", err)
+	}
+
+	err = os.Chdir(dir)
 
 	if err != nil {
 		log.Fatalln("Couldn't change directory to bin:", err)

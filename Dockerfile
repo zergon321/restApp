@@ -1,16 +1,16 @@
-FROM golang:1.12
-
+FROM golang:1.12 AS builder
 ADD . /go/src/restApp
-
 RUN go get gopkg.in/yaml.v2
 RUN go get github.com/lib/pq
 RUN go get github.com/gorilla/mux
-RUN go install restApp
-
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/restApp /go/src/restApp/
 COPY sql/ /go/bin/sql/
 COPY config.yml /go/bin/
-
 ENTRYPOINT [ "/go/bin/restApp" ]
-
 # Just a meta-command, doesn't really do anything.
+EXPOSE 80
+
+FROM alpine:latest
+COPY --from=builder /go/bin/ /bin/rest/
+ENTRYPOINT [ "/bin/rest/restApp" ]
 EXPOSE 80
