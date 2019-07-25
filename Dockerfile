@@ -12,4 +12,5 @@ COPY config.yml /go/bin/
 
 ENTRYPOINT [ "/go/bin/restApp" ]
 
+# Just a meta-command, doesn't really do anything.
 EXPOSE 80
