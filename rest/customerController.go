@@ -185,17 +185,15 @@ func (ctl *CustomerController) deleteCustomer(w http.ResponseWriter, r *http.Req
 	ctl.sendSuccess(w, "Deleted successfully")
 }
 
-// GetRouter returns a router for the REST API.
-func (ctl *CustomerController) GetRouter() *mux.Router {
-	ctl.router.Use(jsonMiddleware)
+// SetupRoutes sets up routes for the controller.
+func (ctl *CustomerController) SetupRoutes(router *mux.Router) {
+	router.Use(jsonMiddleware)
 
-	ctl.router.HandleFunc("/customers/{id:[0-9]+}", ctl.getCustomer).Methods("GET")
-	ctl.router.HandleFunc("/customers/all", ctl.getCustomers).Methods("GET")
-	ctl.router.HandleFunc("/customers/add", ctl.addCustomer).Methods("POST")
-	ctl.router.HandleFunc("/customers/update", ctl.updateCustomer).Methods("PATCH")
-	ctl.router.HandleFunc("/customers/{id:[0-9]+}", ctl.deleteCustomer).Methods("DELETE")
-
-	return ctl.router
+	router.HandleFunc("/{id:[0-9]+}", ctl.getCustomer).Methods("GET")
+	router.HandleFunc("/", ctl.getCustomers).Methods("GET")
+	router.HandleFunc("/", ctl.addCustomer).Methods("POST")
+	router.HandleFunc("/", ctl.updateCustomer).Methods("PATCH")
+	router.HandleFunc("/{id:[0-9]+}", ctl.deleteCustomer).Methods("DELETE")
 }
 
 // NewCustomerController returns a new controller for the REST API operations on customers.
@@ -204,7 +202,6 @@ func NewCustomerController(repository repo.ICustomerRepository, logger *log.Logg
 
 	ctl.customerRepo = repository
 	ctl.logger = logger
-	ctl.router = mux.NewRouter()
 
 	return ctl
 }

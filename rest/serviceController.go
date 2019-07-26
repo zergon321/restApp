@@ -185,17 +185,15 @@ func (ctl *ServiceController) deleteService(w http.ResponseWriter, r *http.Reque
 	ctl.sendSuccess(w, "Deleted successfully")
 }
 
-// GetRouter returns a router for the REST API.
-func (ctl *ServiceController) GetRouter() *mux.Router {
-	ctl.router.Use(jsonMiddleware)
+// SetupRoutes sets up routes for the controller.
+func (ctl *ServiceController) SetupRoutes(router *mux.Router) {
+	router.Use(jsonMiddleware)
 
-	ctl.router.HandleFunc("/services/{id:[0-9]+}", ctl.getService).Methods("GET")
-	ctl.router.HandleFunc("/services/all", ctl.getServices).Methods("GET")
-	ctl.router.HandleFunc("/services/add", ctl.addService).Methods("POST")
-	ctl.router.HandleFunc("/services/update", ctl.updateService).Methods("PATCH")
-	ctl.router.HandleFunc("/services/{id:[0-9]+}", ctl.deleteService).Methods("DELETE")
-
-	return ctl.router
+	router.HandleFunc("/{id:[0-9]+}", ctl.getService).Methods("GET")
+	router.HandleFunc("/", ctl.getServices).Methods("GET")
+	router.HandleFunc("/", ctl.addService).Methods("POST")
+	router.HandleFunc("/", ctl.updateService).Methods("PATCH")
+	router.HandleFunc("/services/{id:[0-9]+}", ctl.deleteService).Methods("DELETE")
 }
 
 // NewServiceController returns a new controller for the REST API operations on services.
@@ -203,7 +201,6 @@ func NewServiceController(repository repo.IServiceRepository, logger *log.Logger
 	ctl := new(ServiceController)
 
 	ctl.serviceRepo = repository
-	ctl.router = mux.NewRouter()
 	ctl.logger = logger
 
 	return ctl

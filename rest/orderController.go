@@ -371,26 +371,24 @@ func (ctl *OrderController) deleteOrderSevice(w http.ResponseWriter, r *http.Req
 	ctl.sendSuccess(w, "Deleted successfully")
 }
 
-// GetRouter returns a router for the REST API.
-func (ctl *OrderController) GetRouter() *mux.Router {
-	ctl.router.Use(jsonMiddleware)
+// SetupRoutes sets up routes for the controller.
+func (ctl *OrderController) SetupRoutes(router *mux.Router) {
+	router.Use(jsonMiddleware)
 
-	ctl.router.HandleFunc("/orders/{id:[0-9]+}", ctl.getOrder).Methods("GET")
-	ctl.router.HandleFunc("/orders/all", ctl.getOrders).Methods("GET")
-	ctl.router.HandleFunc("/orders/add", ctl.addOrder).Methods("POST")
-	ctl.router.HandleFunc("/orders/update", ctl.updateOrder).Methods("PATCH")
-	ctl.router.HandleFunc("/orders/{id:[0-9]+}", ctl.deleteOrder).Methods("DELETE")
+	router.HandleFunc("/{id:[0-9]+}", ctl.getOrder).Methods("GET")
+	router.HandleFunc("/", ctl.getOrders).Methods("GET")
+	router.HandleFunc("/", ctl.addOrder).Methods("POST")
+	router.HandleFunc("/", ctl.updateOrder).Methods("PATCH")
+	router.HandleFunc("/{id:[0-9]+}", ctl.deleteOrder).Methods("DELETE")
 
-	ctl.router.HandleFunc("/orders/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
+	router.HandleFunc("/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
 		ctl.getOrderService).Methods("GET")
-	ctl.router.HandleFunc("/orders/{orderId:[0-9]}/services/all",
+	router.HandleFunc("/{orderId:[0-9]}/services",
 		ctl.getOrderServices).Methods("GET")
-	ctl.router.HandleFunc("/orders/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
+	router.HandleFunc("/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
 		ctl.addOrderService).Methods("POST")
-	ctl.router.HandleFunc("/orders/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
+	router.HandleFunc("/{orderId:[0-9]+}/services/{serviceId:[0-9]+}",
 		ctl.deleteOrderSevice).Methods("DELETE")
-
-	return ctl.router
 }
 
 // NewOrderController returns a new controller for the REST API operations on orders.
@@ -400,7 +398,6 @@ func NewOrderController(orderRepository repo.IOrderRepository,
 
 	ctl.orderRepo = orderRepository
 	ctl.serviceRepo = serviceRepository
-	ctl.router = mux.NewRouter()
 	ctl.logger = logger
 
 	return ctl

@@ -10,11 +10,10 @@ import (
 
 // Controller is a wrapper for controllers with web methods registered in the router.
 type Controller interface {
-	SetupRoutes(router http.Handler)
+	SetupRoutes(router *mux.Router)
 }
 
 type controller struct {
-	router *mux.Router
 	logger *log.Logger
 }
 
