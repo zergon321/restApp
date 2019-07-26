@@ -88,14 +88,7 @@ func main() {
 	orderController := rest.NewOrderController(orderRepo, serviceRepo, logger)
 
 	// Get control muxes.
-	mainMux := http.NewServeMux()
-	customerMux := customerController.GetRouter()
-	serviceMux := serviceController.GetRouter()
-	orderMux := orderController.GetRouter()
+	router := http.NewServeMux()
 
-	mainMux.Handle("/customers/", customerMux)
-	mainMux.Handle("/services/", serviceMux)
-	mainMux.Handle("/orders/", orderMux)
-
-	http.ListenAndServe(":80", mainMux)
+	http.ListenAndServe(":80", router)
 }
