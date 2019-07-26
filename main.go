@@ -12,6 +12,8 @@ import (
 	"restApp/repo"
 	"restApp/rest"
 
+	"github.com/gorilla/mux"
+
 	"gopkg.in/yaml.v2"
 
 	_ "github.com/lib/pq"
@@ -88,7 +90,7 @@ func main() {
 	orderController := rest.NewOrderController(orderRepo, serviceRepo, logger)
 
 	// Get control muxes.
-	router := http.NewServeMux()
+	router := mux.NewRouter()
 
 	http.ListenAndServe(":80", router)
 }
