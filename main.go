@@ -89,8 +89,15 @@ func main() {
 	serviceController := rest.NewServiceController(serviceRepo, logger)
 	orderController := rest.NewOrderController(orderRepo, serviceRepo, logger)
 
-	// Get control muxes.
+	// Setup REST routes.
 	router := mux.NewRouter()
+	customers := router.PathPrefix("/customers").Subrouter()
+	services := router.PathPrefix("/services").Subrouter()
+	orders := router.PathPrefix("/orders").Subrouter()
+
+	customerController.SetupRoutes(customers)
+	serviceController.SetupRoutes(services)
+	orderController.SetupRoutes(orders)
 
 	http.ListenAndServe(":80", router)
 }
