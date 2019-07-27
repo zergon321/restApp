@@ -1,7 +1,10 @@
 all: build run
 
-build:
+build: assets
 	docker build -t rest .
+
+assets:
+	go-bindata -o assets/assets.go --pkg assets sql/...
 
 rebuild: clean build
 
