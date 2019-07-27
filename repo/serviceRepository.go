@@ -1,6 +1,9 @@
 package repo
 
-import "database/sql"
+import (
+	"database/sql"
+	"restApp/assets"
+)
 
 // ServiceRepository represents a data repository and implements CRUD methods for services.
 type ServiceRepository struct {
@@ -9,13 +12,13 @@ type ServiceRepository struct {
 
 // GetServiceByID returns a single service under the specified ID.
 func (repo *ServiceRepository) GetServiceByID(id int64) (*Service, error) {
-	script, err := GetSQLScript("sql/services/get_service_by_id.sql")
+	script, err := assets.Asset("sql/services/get_service_by_id.sql")
 
 	if err != nil {
 		return nil, err
 	}
 
-	row := repo.db.QueryRow(script, id)
+	row := repo.db.QueryRow(string(script), id)
 	service := new(Service)
 	err = row.Scan(&service.ID, &service.Title, &service.Description, &service.Price)
 
@@ -28,13 +31,13 @@ func (repo *ServiceRepository) GetServiceByID(id int64) (*Service, error) {
 
 // GetAllServices returns a set of all services from the database.
 func (repo *ServiceRepository) GetAllServices() ([]*Service, error) {
-	script, err := GetSQLScript("sql/services/get_all_services.sql")
+	script, err := assets.Asset("sql/services/get_all_services.sql")
 
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := repo.db.Query(script)
+	rows, err := repo.db.Query(string(script))
 
 	if err != nil {
 		return nil, err
@@ -58,26 +61,26 @@ func (repo *ServiceRepository) GetAllServices() ([]*Service, error) {
 
 // AddService adds a new service to the database.
 func (repo *ServiceRepository) AddService(service *Service) error {
-	script, err := GetSQLScript("sql/services/add_service.sql")
+	script, err := assets.Asset("sql/services/add_service.sql")
 
 	if err != nil {
 		return err
 	}
 
-	_, err = repo.db.Exec(script, service.Title, service.Description, service.Price)
+	_, err = repo.db.Exec(string(script), service.Title, service.Description, service.Price)
 
 	return err
 }
 
 // UpdateService updates the service in the database.
 func (repo *ServiceRepository) UpdateService(service *Service) error {
-	script, err := GetSQLScript("sql/services/update_service.sql")
+	script, err := assets.Asset("sql/services/update_service.sql")
 
 	if err != nil {
 		return err
 	}
 
-	_, err = repo.db.Exec(script, service.ID, service.Title,
+	_, err = repo.db.Exec(string(script), service.ID, service.Title,
 		service.Description, service.Price)
 
 	return err
@@ -85,13 +88,13 @@ func (repo *ServiceRepository) UpdateService(service *Service) error {
 
 // DeleteService deletes the service from the database.
 func (repo *ServiceRepository) DeleteService(id int64) error {
-	script, err := GetSQLScript("sql/services/delete_service.sql")
+	script, err := assets.Asset("sql/services/delete_service.sql")
 
 	if err != nil {
 		return err
 	}
 
-	_, err = repo.db.Exec(script, id)
+	_, err = repo.db.Exec(string(script), id)
 
 	return err
 }
