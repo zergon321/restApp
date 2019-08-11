@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -26,7 +28,36 @@ const (
 	PREFIX = "app: "
 )
 
+var (
+	dbDriver   string
+	dbProtocol string
+	dbUsername string
+	dbPassword string
+	dbHost     string
+	dbName     string
+
+	address string
+	port    string
+)
+
+// parseFlags parses command line arguments and assigns them to global variables.
+func parseFlags() {
+	flag.StringVar(&dbDriver, "dbdriver", "", "A driver to access the database")
+	flag.StringVar(&dbProtocol, "dbprotocol", "", "A protocol to access the database")
+	flag.StringVar(&dbUsername, "dbusername", "", "A username to access the database")
+	flag.StringVar(&dbPassword, "dbpassword", "", "A password to access the database")
+	flag.StringVar(&dbHost, "dbhost", "", "A host on which the DBMS is deployed")
+	flag.StringVar(&dbName, "dbname", "", "A name of the database")
+
+	flag.StringVar(&address, "address", "", "An address to listen on")
+	flag.StringVar(&port, "port", "80", "A port to listen on")
+
+	flag.Parse()
+}
+
 func main() {
+	parseFlags()
+
 	// Change working directory to the application directory.
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 
@@ -48,7 +79,8 @@ func main() {
 	}
 	defer file.Close()
 
-	logger := log.New(file, PREFIX, log.LstdFlags|log.Lshortfile)
+	stream := io.MultiWriter(os.Stdout, file)
+	logger := log.New(stream, PREFIX, log.LstdFlags|log.Lshortfile)
 
 	// Retrieve configuration settings from the yml-file.
 	confFile, err := os.OpenFile(CONFIG, os.O_RDONLY, 0666)
@@ -71,8 +103,8 @@ func main() {
 	}
 
 	// Open database connection.
-	db, err := sql.Open(config.Driver, fmt.Sprintf("%s://%s:%s@%s/%s",
-		config.Protocol, config.Username, config.Password, config.Host, config.DbName))
+	db, err := sql.Open(dbDriver, fmt.Sprintf("%s://%s:%s@%s/%s",
+		dbProtocol, dbUsername, dbPassword, dbHost, dbName))
 
 	if err != nil {
 		logger.Fatalln("Couldn't establish a db connection:", err)
@@ -99,5 +131,6 @@ func main() {
 	serviceController.SetupRoutes(services)
 	orderController.SetupRoutes(orders)
 
-	http.ListenAndServe(":80", router)
+	addr := fmt.Sprintf("%s:%s", address, port)
+	http.ListenAndServe(addr, router)
 }
