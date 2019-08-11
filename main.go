@@ -5,18 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-	"restApp/conf"
 	"restApp/repo"
 	"restApp/rest"
 
 	"github.com/gorilla/mux"
-
-	"gopkg.in/yaml.v2"
 
 	_ "github.com/lib/pq"
 )
@@ -71,7 +67,7 @@ func main() {
 		log.Fatalln("Couldn't change directory to bin:", err)
 	}
 
-	// Create log file and logger.
+	// Create a log file and a logger.
 	file, err := os.OpenFile(LOG, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 
 	if err != nil {
@@ -81,26 +77,6 @@ func main() {
 
 	stream := io.MultiWriter(os.Stdout, file)
 	logger := log.New(stream, PREFIX, log.LstdFlags|log.Lshortfile)
-
-	// Retrieve configuration settings from the yml-file.
-	confFile, err := os.OpenFile(CONFIG, os.O_RDONLY, 0666)
-
-	if err != nil {
-		logger.Fatalln("Couldn't open config file:", err)
-	}
-
-	data, err := ioutil.ReadAll(confFile)
-
-	if err != nil {
-		logger.Fatalln("Couldn't read config file:", err)
-	}
-
-	config := conf.DbConfiguration{}
-	err = yaml.Unmarshal(data, &config)
-
-	if err != nil {
-		logger.Fatalln("Couldn't parse config file:", err)
-	}
 
 	// Open database connection.
 	db, err := sql.Open(dbDriver, fmt.Sprintf("%s://%s:%s@%s/%s",

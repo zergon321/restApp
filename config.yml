@@ -1,6 +1,0 @@
-driver: postgres
-protocol: postgres
-username: postgres
-password: XXXX
-host: 0.0.0.0
-dbname: accounting
