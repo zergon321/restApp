@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+
+  api:
+    build:
+      context: .
+      image: rest
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    volumes:
+      - type: volume
+        source: app
+        target: /go/bin
+    links:
+      - db
+      - db:database
+    container_name: rest_server
+    command: [ "/bin/rest/restApp",
+               "--dbdriver="postgres"",
+               "--dbprotocol="postgres"",
+               "--dbusername="postgres"",
+               "--dbpassword="XXXXXX"",
+               "--dbhost="0.0.0.0"",
+               "--dbname="accounting"" ]
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "XXXXXXXX"
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /var/lib/postgresql/data
+    container_name: db_server
+
+volumes:
+  app:
+  dbdata:
+    
