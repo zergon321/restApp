@@ -3,9 +3,7 @@ version: "3.7"
 services:
 
   api:
-    build:
-      context: .
-      image: rest
+    build: .
     depends_on:
       - db
     ports:
@@ -18,20 +16,20 @@ services:
       - db
       - db:database
     container_name: rest_server
-    command: [ "/bin/rest/restApp",
-               "--dbdriver="postgres"",
-               "--dbprotocol="postgres"",
-               "--dbusername="postgres"",
-               "--dbpassword="XXXXXX"",
-               "--dbhost="0.0.0.0"",
-               "--dbname="accounting"" ]
+    command:
+      - --dbdriver=postgres
+      - --dbprotocol=postgres
+      - --dbusername=postgres
+      - --dbpassword=********
+      - --dbhost=database
+      - --dbname=accounting
 
   db:
     image: postgres
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: "XXXXXXXX"
+      POSTGRES_PASSWORD: "********"
     volumes:
       - type: volume
         source: dbdata

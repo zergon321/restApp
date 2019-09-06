@@ -79,7 +79,7 @@ func main() {
 	logger := log.New(stream, PREFIX, log.LstdFlags|log.Lshortfile)
 
 	// Open database connection.
-	db, err := sql.Open(dbDriver, fmt.Sprintf("%s://%s:%s@%s/%s",
+	db, err := sql.Open(dbDriver, fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=disable",
 		dbProtocol, dbUsername, dbPassword, dbHost, dbName))
 
 	if err != nil {

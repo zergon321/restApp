@@ -32,7 +32,7 @@ func (ctl *ServiceController) getService(w http.ResponseWriter, r *http.Request)
 	service, err := ctl.serviceRepo.GetServiceByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There is no service with id %d in the database", id))
 

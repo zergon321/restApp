@@ -32,7 +32,7 @@ func (ctl *CustomerController) getCustomer(w http.ResponseWriter, r *http.Reques
 	customer, err := ctl.customerRepo.GetCustomerByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There is no customer with id %d in the database", id))
 
@@ -55,7 +55,7 @@ func (ctl *CustomerController) getCustomers(w http.ResponseWriter, r *http.Reque
 	customers, err := ctl.customerRepo.GetAllCustomers()
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			"Couldn't extract any entry from the customers database")
 
@@ -131,7 +131,7 @@ func (ctl *CustomerController) updateCustomer(w http.ResponseWriter, r *http.Req
 	_, err = ctl.customerRepo.GetCustomerByID(customer.ID)
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound, "The customer doesn't exist")
 
 		return
@@ -165,7 +165,7 @@ func (ctl *CustomerController) deleteCustomer(w http.ResponseWriter, r *http.Req
 	_, err = ctl.customerRepo.GetCustomerByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			"The customer doesn't exist")
 

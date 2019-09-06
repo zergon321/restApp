@@ -33,7 +33,7 @@ func (ctl *OrderController) getOrder(w http.ResponseWriter, r *http.Request) {
 	order, err := ctl.orderRepo.GetOrderByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There is no order with id %d in the database", id))
 
@@ -56,7 +56,7 @@ func (ctl *OrderController) getOrders(w http.ResponseWriter, r *http.Request) {
 	orders, err := ctl.orderRepo.GetAllOrders()
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			"Couldn't extract any entry from the orders database")
 
@@ -209,7 +209,7 @@ func (ctl *OrderController) getOrderService(w http.ResponseWriter, r *http.Reque
 	service, err := ctl.orderRepo.GetOrderServiceByID(int64(orderID), int64(serviceID))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There is no service with id %d for order with id %d in the database", serviceID, orderID))
 
@@ -242,7 +242,7 @@ func (ctl *OrderController) getOrderServices(w http.ResponseWriter, r *http.Requ
 	services, err := ctl.orderRepo.GetAllOrderServices(int64(orderID))
 
 	if err != nil {
-		ctl.handleInternalError("Datavase access error:", err)
+		ctl.handleInternalError("Database access error:", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There are no services for order with id %d in the database", orderID))
 
