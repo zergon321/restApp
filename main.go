@@ -19,14 +19,14 @@ import (
 
 // Configuration constants for the application.
 const (
-	LOG    = "sys.log"
-	CONFIG = "config.yml"
-	PREFIX = "app: "
+	LOG      = "sys.log"
+	CONFIG   = "config.yml"
+	PREFIX   = "app: "
+	DRIVER   = "postgres"
+	PROTOCOL = "postgres"
 )
 
 var (
-	dbDriver   string
-	dbProtocol string
 	dbUsername string
 	dbPassword string
 	dbHost     string
@@ -38,8 +38,6 @@ var (
 
 // parseFlags parses command line arguments and assigns them to global variables.
 func parseFlags() {
-	flag.StringVar(&dbDriver, "dbdriver", "", "A driver to access the database")
-	flag.StringVar(&dbProtocol, "dbprotocol", "", "A protocol to access the database")
 	flag.StringVar(&dbUsername, "dbusername", "", "A username to access the database")
 	flag.StringVar(&dbPassword, "dbpassword", "", "A password to access the database")
 	flag.StringVar(&dbHost, "dbhost", "", "A host on which the DBMS is deployed")
@@ -79,8 +77,8 @@ func main() {
 	logger := log.New(stream, PREFIX, log.LstdFlags|log.Lshortfile)
 
 	// Open database connection.
-	db, err := sql.Open(dbDriver, fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=disable",
-		dbProtocol, dbUsername, dbPassword, dbHost, dbName))
+	db, err := sql.Open(DRIVER, fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=disable",
+		PROTOCOL, dbUsername, dbPassword, dbHost, dbName))
 
 	if err != nil {
 		logger.Fatalln("Couldn't establish a db connection:", err)

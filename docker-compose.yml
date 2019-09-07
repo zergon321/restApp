@@ -17,8 +17,6 @@ services:
       - db:database
     container_name: rest_server
     command:
-      - --dbdriver=postgres
-      - --dbprotocol=postgres
       - --dbusername=postgres
       - --dbpassword=********
       - --dbhost=database
