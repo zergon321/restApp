@@ -1,7 +1,7 @@
 all: build run
 
 build: assets
-	docker build -t rest .
+	docker-compose build
 
 assets:
 	go-bindata -o assets/assets.go --pkg assets sql/...
@@ -9,13 +9,7 @@ assets:
 rebuild: clean build
 
 clean:
-	docker rmi rest
+	docker rmi restapp_api
 
 run:
-	docker run -it --rm -p 80:80 rest \
-	--dbdriver="postgres" \
-	--dbprotocol="postgres" \
-	--dbusername="postgres" \
-	--dbpassword="XXXXXX" \
-	--dbhost="0.0.0.0" \
-	--dbname="accounting"
+	docker-compose up

@@ -32,7 +32,7 @@ func (ctl *ServiceController) getService(w http.ResponseWriter, r *http.Request)
 	service, err := ctl.serviceRepo.GetServiceByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Database access error:", err)
+		ctl.handleInternalError("Database access error", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			fmt.Sprintf("There is no service with id %d in the database", id))
 
@@ -55,7 +55,7 @@ func (ctl *ServiceController) getServices(w http.ResponseWriter, r *http.Request
 	services, err := ctl.serviceRepo.GetAllServices()
 
 	if err != nil {
-		ctl.handleInternalError("Database access error:", err)
+		ctl.handleInternalError("Database access error", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			"Couldn't extract any entry from the services database")
 
@@ -131,7 +131,7 @@ func (ctl *ServiceController) updateService(w http.ResponseWriter, r *http.Reque
 	_, err = ctl.serviceRepo.GetServiceByID(service.ID)
 
 	if err != nil {
-		ctl.handleInternalError("Database access error:", err)
+		ctl.handleInternalError("Database access error", err)
 		ctl.handleWebError(w, http.StatusNotFound, "The service doesn't exist")
 
 		return
@@ -165,7 +165,7 @@ func (ctl *ServiceController) deleteService(w http.ResponseWriter, r *http.Reque
 	_, err = ctl.serviceRepo.GetServiceByID(int64(id))
 
 	if err != nil {
-		ctl.handleInternalError("Database access error:", err)
+		ctl.handleInternalError("Database access error", err)
 		ctl.handleWebError(w, http.StatusNotFound,
 			"The service doesn't exist")
 

@@ -11,7 +11,7 @@ services:
     volumes:
       - type: volume
         source: app
-        target: /go/bin
+        target: /bin/rest
     links:
       - db
       - db:database
