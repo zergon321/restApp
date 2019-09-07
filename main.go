@@ -19,7 +19,7 @@ import (
 
 // Configuration constants for the application.
 const (
-	LOG      = "sys.log"
+	LOG      = "/var/log/rest/sys.log"
 	CONFIG   = "config.yml"
 	PREFIX   = "app: "
 	DRIVER   = "postgres"

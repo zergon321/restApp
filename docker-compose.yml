@@ -10,8 +10,8 @@ services:
       - 80:80
     volumes:
       - type: volume
-        source: app
-        target: /bin/rest
+        source: applogs
+        target: /var/log/rest
     links:
       - db
       - db:database
@@ -35,6 +35,6 @@ services:
     container_name: db_server
 
 volumes:
-  app:
+  applogs:
   dbdata:
     
