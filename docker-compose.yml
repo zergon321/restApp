@@ -18,16 +18,16 @@ services:
     container_name: rest_server
     command:
       - --dbusername=postgres
-      - --dbpassword=********
+      - --dbpassword=322453az
       - --dbhost=database
       - --dbname=accounting
 
   db:
-    image: postgres
+    image: postgres:9.6.19-alpine
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: "********"
+      POSTGRES_PASSWORD: "322453az"
     volumes:
       - type: volume
         source: dbdata
